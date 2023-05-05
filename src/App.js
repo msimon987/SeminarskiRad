@@ -12,36 +12,48 @@ function randomName() {
 }
 
 function randomColor() {
- return '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16);
+ return '#' + Math.floor(Math.random() * 0xFFFFFA).toString(16);
 }
 class App extends React.Component {
 
+  constructor() {
+    super();
+    this.drone = new window.Scaledrone("PnFavtIMvMsf69yV", {
+      data: this.state.member
+    });
+    this.drone.on('open', error => {
+      if (error) {
+        return console.error(error);
+      }
+      const member = {...this.state.member};
+      member.id = this.drone.clientId;
+      this.setState({member});
+    });
+ // ---
+    const room = this.drone.subscribe("observable-room");
+ // ---
+    room.on('data', (data, member) => {
+      const messages = this.state.messages;
+      messages.push({member, text: data});
+      this.setState({messages});
+    });
+  }
 
   state = {
-    messages: [
-      {
-        text: "This is a test message!",
-        member: {
-          color: "blue",
-          username: "bluemoon"
-        }
-      }
-    ],
+    messages: [],
     member: {
       username: randomName(),
       color: randomColor()
     }
   }
-
   onSendMessage = (message) => {
-    const messages = this.state.messages
-    messages.push({
-      text: message,
-      member: this.state.member
-    })
-    this.setState({messages: messages})
+    // quick fix for sending empty message
+    if (message.length===0) return;
+    this.drone.publish({
+      room: "observable-room",
+      message
+    });
   }
-
   render(){
     return (
       <div className="App">
@@ -56,6 +68,9 @@ class App extends React.Component {
     </div>
     );
   }
+  
+
+
 }
 
 export default App;
