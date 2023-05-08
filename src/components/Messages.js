@@ -12,7 +12,7 @@ class Messages extends Component {
   }
 
   renderMessage(message) {
-    const {member, text} = message;
+    const {member, text, time} = message;
     const {currentMember} = this.props;
     const messageFromMe = member.id === currentMember.id;
     const className = messageFromMe ?
@@ -27,8 +27,9 @@ class Messages extends Component {
           <div className="username">
             {member.clientData.username}
           </div>
-          <div className="text">{text}</div>
+          <div className="text">{text}</div>  
         </div>
+        <div className="time">{time}</div>
       </li>
     );
   }

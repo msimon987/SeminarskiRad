@@ -9,8 +9,9 @@
   background-color: #262626;
   overflow: visible;
   width: 100%;
-  text-align: center;
   color: white;
+  display: flex;
+  justify-content: space-between;
 }
 
 .Messages-list {
@@ -96,4 +97,10 @@ button {
   border: none;
   border-radius: 8px;
   margin-left: 10px;
+}
+.time {
+  color: gray;
+  font-size: 12px;
+  padding-bottom: 4px;
+  align-items: flex-end;
 }
